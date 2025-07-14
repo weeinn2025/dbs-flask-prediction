@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request
-from groq import Groq
+#from groq import Groq
 import os
 
 app = Flask(__name__)
 
 # Ensure you have set the GROQ_API_KEY in your environment variables
-client = Groq(api_key=os.getenv("GROQ_API_KEY")) 
+#client = Groq(api_key=os.getenv("GROQ_API_KEY")) 
 
 @app.route("/", methods=["GET", "POST"])
 def index():
