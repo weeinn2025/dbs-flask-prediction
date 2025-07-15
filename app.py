@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import joblib
 from groq import Groq
-from dotenv      import load_dotenv
+from dotenv import load_dotenv
 
 load_dotenv()        # loads environment variables from .env
 app = Flask(__name__)
