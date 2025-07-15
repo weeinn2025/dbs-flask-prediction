@@ -3,10 +3,12 @@ import joblib
 from groq import Groq
 
 import os
+
+app = Flask(__name__)
+
 os.environ['GROQ_API_KEY'] = "Groq_API"
 # for cloud ..........
 
-app = Flask(__name__)
 
 @app.route("/",methods=["GET","POST"])
 def index():
