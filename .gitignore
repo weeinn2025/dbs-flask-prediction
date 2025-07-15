@@ -1,2 +1,5 @@
 # .gitignore
 .env
+
+# local venv folder
+venv/
