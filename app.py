@@ -1,14 +1,10 @@
 from flask import Flask, render_template, request
 import joblib
 from groq import Groq
+from dotenv      import load_dotenv
 
-import os
-
+load_dotenv()        # loads environment variables from .env
 app = Flask(__name__)
-
-os.environ['GROQ_API_KEY'] = "Groq_API"
-# for cloud ..........
-
 
 @app.route("/",methods=["GET","POST"])
 def index():
@@ -51,7 +47,7 @@ def prediction():
     model = joblib.load("dbs.jl")
     # make prediction
     pred = model.predict([[q]])
-    return(render_template("prediction.html",r=pred))
+    return(render_template("prediction.html", r=pred))
 
 if __name__ == "__main__":
     app.run()
