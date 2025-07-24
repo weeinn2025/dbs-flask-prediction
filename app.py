@@ -3,7 +3,11 @@ import joblib
 from groq import Groq
 from dotenv import load_dotenv
 
-load_dotenv()        # loads environment variables from .env
+# Only load .env in development (not needed in production)
+if os.environ.get("RENDER") != "true":
+    from dotenv import load_dotenv
+    load_dotenv()
+    
 app = Flask(__name__)
 
 @app.route("/",methods=["GET","POST"])
