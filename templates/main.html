@@ -1,18 +1,30 @@
-<!DOCTYPE html>
-<html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-  <div class="container">
+    <div class="container">
     <h2>Main</h2>
-    <form action="/llama" method="post">
-      <input type="submit" value="Welcome to Chatbot">
-    </form>
-    <form action="/dbs" method="post">
-      <input type="submit" value="Predict DBS price">
-    </form>
-  </div>
-</body>
-</html>
+        <form action="/llama" method="post">
+            <input type="submit" value="LLAMA chatbot via groq">
+        </form>
+        <form action="/deepseek" method="post">
+            <input type="submit" value="DEEPSEEK chatbot via groq">
+        </form>
+        <form action="/dbs" method="post">
+            <input type="submit" value="Predict DBS price">
+        </form>
+        <form action="/telegram" method="post">
+            <input type="submit" value="START TELEGRAM">
+        </form>
+        <form action="/user_log" method="post">
+            <input type="submit" value="USER LOGS">
+        </form>
+        <form action="/delete_log" method="post">
+            <input type="submit" value="DELETE LOGS">
+        </form>
+        <form action="/sepia" method="post">
+            <input type="submit" value="SEPIA chatbot via HF">
+        </form>
+    </div>
+</body>    
