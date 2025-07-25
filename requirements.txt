@@ -5,3 +5,4 @@ joblib
 scikit-learn
 python-telegram-bot==20.*   # or latest v20.x
 requests
+python-dotenv
