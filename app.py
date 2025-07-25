@@ -1,12 +1,21 @@
 from flask import Flask, render_template, request
 import joblib
 from groq import Groq
+import os
+import requests
 from dotenv import load_dotenv
+import sqlite3
+from flask import g
+import datetime
+from datetime import datetime
 
 # Only load .env in development (not needed in production)
 if os.environ.get("RENDER") != "true":
     from dotenv import load_dotenv
     load_dotenv()
+
+api_key = os.environ.get("GROQ_API_KEY")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_TOKEN")
     
 app = Flask(__name__)
 
@@ -18,6 +27,17 @@ def index():
 def main():
     q = request.form.get("q")
     # db
+    if q:  # only log if a name was submitted
+        import sqlite3
+        import datetime
+        t = datetime.datetime.now()
+
+        conn = sqlite3.connect('user.db')
+        c = conn.cursor()
+        c.execute('INSERT INTO user (name, timestamp) VALUES (?, ?)', (q, t))
+        conn.commit()
+        c.close()
+        conn.close()
     return(render_template("main.html"))
 
 @app.route("/llama",methods=["GET","POST"])
@@ -39,6 +59,28 @@ def llama_reply():
         ]
     )
     return(render_template("llama_reply.html",r=completion.choices[0].message.content))
+
+## Route to handle the DeepSeek chatbot page
+@app.route("/deepseek", methods=["GET","POST"])
+def deepseek():
+    return render_template("deepseek.html")
+
+## Route to handle the DeepSeek chatbot reply logic
+@app.route("/deepseek_reply", methods=["POST"])
+def deepseek_reply():
+    q = request.form.get("q")
+    client = Groq()
+    completion = client.chat.completions.create(
+        model="deepseek-r1-distill-llama-70b",
+        messages=[
+            {
+                "role": "user",
+                "content": q
+            }
+        ]
+    )
+    return (render_template("deepseek_reply.html", r=completion.choices[0].message.content))
+
 
 @app.route("/dbs",methods=["GET","POST"])
 def dbs():
@@ -126,6 +168,41 @@ def webhook():
 @app.route('/sepia', methods=['GET', 'POST'])
 def sepia():
     return render_template("sepia.html")
+
+## Route to handle the user logs page
+@app.route("/users", methods=["POST"])
+def users():
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    c.execute('SELECT name, timestamp FROM user')
+    raw_logs = c.fetchall()
+    c.close()
+    conn.close()
+
+    if not raw_logs:  # Check if logs are empty
+        return render_template("users.html", message="No logs to display.")
+    
+    # Format timestamps
+    logs = [
+        (name, datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f").strftime("%d %b %Y, %I:%M %p"))
+        for name, timestamp in raw_logs
+    ]
+    
+    return render_template("users.html", logs=logs)
+
+## Route to handle the deletion of user logs
+@app.route("/delete_log", methods=["POST"])
+def delete_log():
+    import sqlite3
+
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    c.execute('DELETE FROM user')  # delete all rows from user table
+    conn.commit()
+    c.close()
+    conn.close()
+
+    return render_template("users_delete.html")
 
 if __name__ == "__main__":
     app.run()
