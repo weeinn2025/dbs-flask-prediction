@@ -10,9 +10,9 @@ import datetime
 from datetime import datetime
 
 # Only load .env in development (not needed in production)
-if os.environ.get("RENDER") != "true":
-    from dotenv import load_dotenv
-    load_dotenv()
+#if os.environ.get("RENDER") != "true":
+#    from dotenv import load_dotenv
+#    load_dotenv()
 
 api_key = os.environ.get("GROQ_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_TOKEN")
